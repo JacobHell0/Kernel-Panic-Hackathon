@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "Voxa - AI Translator & Voice Assistant",
+    "version": "1.0",
+    "description": "Translate text & speech, read pages aloud, and interact with voice commands.",
+    "permissions": ["storage", "activeTab", "tts", "tabs"],
+    "host_permissions": ["https://*/*", "http://*/*"],
+    "externally_connectable": {
+      "matches": ["*://*.google.com/*", "*://*/*"]  
+    },
+    "background": {
+      "service_worker": "service-worker.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  
