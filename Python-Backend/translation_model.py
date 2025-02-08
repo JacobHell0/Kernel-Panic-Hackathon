@@ -18,11 +18,41 @@ class TranslatorModel():
     SPLIT_LIMIT = 50
 
     def __init__(self):
-        nltk.download('punkt')  # Download the Punkt tokenizer models if you haven't already
+        nltk.download('punkt') # download tokenizer libraries
         nltk.download('punkt_tab')
 
 
-    def split_by_sentence(self, long_string: str) -> list[str]:
+    def generate(self, prompt: str, src_lang: str, tgt_lang: str) -> str:
+        """Uses the facebook nllb-200-distilled-1.3B model to translate the
+        string: prompt. """
+
+        # Split the input data into sentences (massively improves translation)
+        batches = self._split_by_sentence(prompt)
+        print("Tokenizer produced:")
+        print(batches)
+        print("--------end of tokenization---------------")
+
+        # Set device (0 for GPU, -1 for CPU)
+        device = 0 if torch.cuda.is_available() else -1
+        print(f"Using device: {'GPU' if device == 0 else 'CPU'}")
+
+
+        # Load translation model on the correct device
+        pipe = pipeline("translation", model="facebook/nllb-200-distilled-1.3B", device=device)
+
+        return_var = ""
+        for i in range(len(batches)):
+            var = self._prompt_model(batches[i], src_lang=src_lang, tgt_lang=tgt_lang, pipe=pipe, debug=True)
+            print(f"batch {i}: {var}\n")
+            return_var += var
+
+        print("Translated:--------")
+        print(return_var)
+        return return_var
+
+
+
+    def _split_by_sentence(self, long_string: str) -> list[str]:
         """This function takes a long string and will split it into complete
         sentences, up to length SPLIT_LIMIT. Returns a list of sentences
         """
@@ -36,36 +66,19 @@ class TranslatorModel():
 
 
 
-    def generate(self, prompt: str):
-
-        batches = self.split_by_sentence(prompt)
-        print("Tokenizer produced:")
-        print(batches)
-        print("end of tokenization---------------")
-
-        # Set device (0 for GPU, -1 for CPU)
-        device = 0 if torch.cuda.is_available() else -1
-        print(f"Using device: {'GPU' if device == 0 else 'CPU'}")
-
-
-        # Load translation model on the correct device
-        pipe = pipeline("translation", model="facebook/nllb-200-distilled-1.3B", device=device)
-
-        return_var = ""
-        for i in range(len(batches)):
-            var = self.prompt_model(batches[i], pipe=pipe, debug=True)
-            print(f"batch {i}: {var}\n")
-            return_var += var
-
-        return return_var
-
-
-    def prompt_model(self, prompt: str, pipe: Pipeline, debug=False) -> str:
+    def _prompt_model(self, prompt: str, pipe: Pipeline, src_lang: str,
+                       tgt_lang: str, debug=False) -> str:
+        """Takes a prompt and asks the model to translate it from src_lang to
+        tgt_lang."""
 
         if debug:
             start = time.time()
-        # Translate text (example: English to French)
-        result = pipe(prompt, src_lang="eng_Latn", tgt_lang="fra_Latn")
+
+        if debug:
+            print(f"--src: {src_lang}, --tgt: {tgt_lang}")
+
+        # Translate text
+        result = pipe(prompt, src_lang=src_lang, tgt_lang=tgt_lang)
 
         if debug:
             end = time.time()
