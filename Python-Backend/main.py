@@ -4,7 +4,7 @@ from flask import Flask, render_template
 from flask_apscheduler import APScheduler
 from flask import send_file
 import requests
-from testing import generate
+from translation_model import TranslatorModel
 
 app = Flask(__name__)
 
@@ -25,7 +25,9 @@ def home():
 
 @app.route('/generate')
 def manual_send_j():
-    var = generate("Hello, how are you?")
+    translation = TranslatorModel()
+
+    var = translation.generate("Hello, how are you?")
     return var
 
 
