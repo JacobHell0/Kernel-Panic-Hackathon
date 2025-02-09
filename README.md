@@ -5,7 +5,7 @@ Voxa AI Assistant is a browser extension designed to enhance browsing by enablin
 
 The extension integrates AI-powered features, ensuring efficient and high-quality responses tailored to your needs. It is customizable and provides a toggle switch to turn the extension on or off at any time.
 
-Voxa AI Assistant addresses the issue of digital accessibility by providing tools like instant translation and text summarization, making online content easier to understand for non-tech-savvy users and underserved communities.
+(Challenge 4) Voxa AI Assistant addresses the issue of digital accessibility by providing tools like instant translation and text summarization, making online content easier to understand for non-tech-savvy users and underserved communities.
   - Language Translation: Helps users overcome language barriers by translating highlighted text.
   - Simplified Interaction: Users can access features with a context menu, reducing complexity.
 
