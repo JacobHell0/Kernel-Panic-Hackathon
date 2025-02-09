@@ -39,7 +39,7 @@ To run the application locally, follow the steps:
 2. Load the Extension into Your Browser:
     - Open "chrome://extensions/" (in Chrome or a Chromium-based browser).
     - Enable Developer Mode (top-right).
-    - Click on Load Unpacked and select the folder where you cloned the repository.
+    - Click on Load Unpacked and select the folder: Unpacked-Chrome-Extension.
     - The extension should now appear in your browser.
    
 ## 🧑‍🤝‍🧑 Group Members
