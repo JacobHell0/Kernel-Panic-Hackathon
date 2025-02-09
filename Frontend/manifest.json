@@ -6,15 +6,16 @@
     "permissions": ["storage", "activeTab", "tts", "tabs"],
     "host_permissions": ["https://*/*", "http://*/*"],
     "externally_connectable": {
-      "matches": ["*://*.google.com/*", "*://*/*"]  
+      "matches": ["*://*.google.com/*", "*://*/*"]
     },
     "background": {
       "service_worker": "service-worker.js"
     },
+
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["highlightMenu.js", "responseWindow.js"],
+        "js": ["highlightMenu.js", "responseWindow.js", "popup.js"],
         "css": ["highlightMenu.css", "responseWindow.css"]
       }
     ],
@@ -22,4 +23,3 @@
       "default_popup": "popup.html"
     }
   }
-  

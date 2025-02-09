@@ -1,39 +1,54 @@
 console.log("Content script is running");
 
-
-//Extract highlighted text from screen
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
-{
-    if (message.action === "extractText")
-    {
-        console.log("Extracting text from the page...");
-        const bodyText = document.body.innerText;
-        console.log("Extracted Text:", bodyText);
-
-        sendResponse({extractedText: bodyText });
-    }
-});
-
-//Detect mouse up event to create menu after highlight text
-document.addEventListener('mouseup', (e) => {
+let mouseUpListener = (e) => {
   const selection = window.getSelection();
-  if (selection.toString().length > 0)
-    {
-    setTimeout(() => { //Set delay to ensure menu appears after click release
-
+  if (selection.toString().length > 0) {
+    setTimeout(() => {
       const menu = document.getElementById('context-menu'); //Label element
-
-      if (!menu)
-      {
+      if (!menu) {
         createMenu(e.pageX, e.pageY, selection.toString());
       }
     }, 100);
-  }
-  else
-  {
+  } else {
     removeMenu();
   }
+};
+
+let clickListener = (event) => {
+  const menu = document.getElementById('context-menu');
+  if (menu && !menu.contains(event.target)) {
+    removeMenu();
+  }
+};
+
+function enableEventListeners() {
+  document.addEventListener('mouseup', mouseUpListener);
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "extractText") {
+      console.log("Extracting text from the page...");
+      const bodyText = document.body.innerText;
+      console.log("Extracted Text:", bodyText);
+      sendResponse({ extractedText: bodyText });
+    }
+  });
+  document.addEventListener('click', clickListener);
+}
+
+function disableEventListeners() {
+  removeMenu();
+  document.removeEventListener('mouseup', mouseUpListener);
+  document.removeEventListener('click', clickListener);
+}
+
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.action === 'disableListeners') {
+    console.log('Disabling event listeners in content script');
+    disableEventListeners();
+  }
 });
+
+enableEventListeners();
+
 
 let currentAction = "Translate"; //first action (default)
 
@@ -129,11 +144,3 @@ function removeMenu()
     }
 }
 
-//Removes the menu when you click off
-document.addEventListener('click', (event) => {
-    const menu = document.getElementById('context-menu');
-    if (menu && !menu.contains(event.target))
-    {
-    removeMenu();
-    }
-});

@@ -1,25 +1,8 @@
-document.getElementById('translate').addEventListener('click', () => {
-  console.log("Translate button clicked");
-
-  // Send a message to the service worker to start extracting text
-  chrome.runtime.sendMessage({ action: "extractText" }, (response) => {
-    if (response && response.status) {
-      console.log(response.status);
-    } else {
-      console.error("No response from the service worker.");
-    }
+document.getElementById('toggleExtension').addEventListener('change', function() {
+  console.log("disabled event listeners");
+    // Send a message to content script
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: 'disableListeners' });
+    });
   });
-});
 
-document.getElementById('readText').addEventListener('click', () => {
-  console.log("Translate button clicked");
-
-  // Send a message to the service worker to start extracting text
-  chrome.runtime.sendMessage({ action: "extractText" }, (response) => {
-    if (response && response.status) {
-      console.log(response.status);
-    } else {
-      console.error("No response from the service worker.");
-    }
-  });
-});
