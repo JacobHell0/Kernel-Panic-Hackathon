@@ -8,6 +8,7 @@ import requests
 
 # Model Loading
 from translation_model import TranslatorModel
+from summarize_model import SummarizeModel
 
 # Helper functions
 from json_post import json_post
@@ -58,6 +59,13 @@ def handle_post_request():
             result = translator.generate(data["text"], src_lang=data["source_lang"], tgt_lang=data["target_lang"])
             print("-- successfully translated, returning post now --")
             return jsonify({"text": f"{result}", "request_type": "translate"}), 200
+
+        elif data["request_type"] == "summarize":
+            summarizer = SummarizeModel()
+            summary = summarizer.summarize(data["text"])
+            print("-- successfully summarized, returning post now --")
+            return jsonify({"text": f"{summary}", "request_type": "summarize"}), 200
+
         else:
             return jsonify("request_type not found"), 400
 

@@ -48,3 +48,45 @@ These codes are mapped to language names (e.g., `"eng": "eng_Latn"` for English,
      "source_lang": "eng",
      "target_lang": "fra"
    }
+
+## Example Summary Request
+```
+const json = {
+  text: data,
+  request_type: "summarize",
+};
+
+fetch('http://jhello.xyz/json_post', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(json)
+})
+.then(response => response.json())
+.then(json => {
+  console.log("Response:", json);
+});
+```
+
+## Example Translate Request
+```
+const json = {
+  text: data2,
+  request_type: "translate",
+  source_lang: "fra",
+  target_lang: "eng",
+};
+
+fetch('http://jhello.xyz/json_post', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(json)
+})
+.then(response => response.json())
+.then(json => {
+  console.log("Response:", json);
+});
+```
