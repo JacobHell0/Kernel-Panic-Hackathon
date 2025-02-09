@@ -15,8 +15,6 @@ from nltk.tokenize import sent_tokenize
 class TranslatorModel():
     """Contains the model that translates languages"""
 
-    SPLIT_LIMIT = 50
-
     def __init__(self):
         nltk.download('punkt') # download tokenizer libraries
         nltk.download('punkt_tab')
