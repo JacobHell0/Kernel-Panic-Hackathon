@@ -12,7 +12,7 @@ The extension integrates AI-powered features, ensuring efficient and high-qualit
   -  Toggle On/Off: Enables or disables the extension with a simple toggle button.
 
 ## ▶️ Demo
-Short clip of the project:
+Short clip of the project: https://www.youtube.com/watch?v=YBqTIyOyiIQ
 
 ## 💻 Technologies Used:
   - HTML5, CSS3, JavaScript – For the core functionality and user interface.
@@ -36,12 +36,7 @@ To run the application locally, follow the steps:
     ```bash
     git clone [repository_url]
     ```
-2. Navigate to the Extension's Folder:
-
-    ```bash
-    cd [folder_url]
-    ```
-3. Load the Extension into Your Browser:
+2. Load the Extension into Your Browser:
     - Open "chrome://extensions/" (in Chrome or a Chromium-based browser).
     - Enable Developer Mode (top-right).
     - Click on Load Unpacked and select the folder where you cloned the repository.
