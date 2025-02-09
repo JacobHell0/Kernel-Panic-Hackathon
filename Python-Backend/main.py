@@ -1,48 +1,48 @@
-# from threading import Thread
-# from apscheduler.triggers.cron import CronTrigger
+# Python Packages
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from flask_apscheduler import APScheduler
 
+# Scheduler
+import requests
 
-
+# Model Loading
 from translation_model import TranslatorModel
 
-# load json handler
+# Helper functions
 from json_post import json_post
 
-
+# init app and enable CORS
 app = Flask(__name__)
 CORS(app)
 
 
-
-
-# uptime tracker TODO -------------------------------------------------------
+# uptime tracker -------------------------------------------------------
 def uptime_ping():
-    """ping to indicate uptime"""
-    # print("sending ping")
-    # requests.get("https://hc-ping.com/0ed0d044-b9e5-4341-b772-1e0fa7e28654")
-    # print("sent ping")
+    """pings healthcheck.io to indicate uptime"""
+
+    requests.get("https://hc-ping.com/b49a4271-be37-4854-9d0d-03c421b76aee")
 
 sched = APScheduler()
-sched.add_job(id='job2', func=uptime_ping, trigger='cron', minute='*', timezone='UTC')
+sched.add_job(id='job', func=uptime_ping, trigger='cron', minute='*', timezone='UTC')
 sched.start()
 
 # -----------------------------------------------------------------------------
 
+# root directory, helpful for checking if the backend is running
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
+# quick test of the translator
 @app.route('/generate')
 def manual_send_j():
     translation = TranslatorModel()
-
     var = translation.generate("Hello, how are you?")
     return var
 
+
+# Main API endpoint
 @app.route('/json_post', methods=['POST'])
 def handle_post_request():
     try:
@@ -66,5 +66,4 @@ def handle_post_request():
 
 
 if __name__ == '__main__':
-    # app.run(debug=True, use_reloader=False, host='0.0.0.0', port=8080)
     app.run(debug=False, use_reloader=False, host='0.0.0.0', port=8080)
