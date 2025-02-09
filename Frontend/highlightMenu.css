@@ -1,38 +1,65 @@
-/*Context Menu Container*/
-#context-menu 
-{
+#context-menu {
     position: absolute;
     background-color: #f1f1f1;
     border: 1px solid #ccc;
     padding: 8px;
     z-index: 9999;
     display: flex;
-    flex-direction: row; /*Horizontal layout*/
-    align-items: center; /*Align vertically*/
+    flex-direction: row; /* Horizontal layout */
+    align-items: flex-start; /* Align items at the top */
     gap: 5px;
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    white-space: nowrap; /*Prevents text wrapping*/
-  }
-  
-  /*Toggle Button*/
-  #toggle-button {
+    white-space: nowrap;
+}
+
+/*Toggle button*/
+#toggle-button 
+{
     width: 40px;
     height: 30px;
     border: none;
     background: #ddd;
     cursor: pointer;
     border-radius: 5px;
-  }
-  
-  /*Type Button*/
-  #main-button 
-  {
+}
+
+/*Handles buttons*/
+#button-wrapper 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+}
+
+/*Action button*/
+#main-button 
+{
     padding: 5px 15px;
     border: none;
     background: #007bff;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
-    flex-grow: 1;
-  }
+    width: 100%;
+}
+
+/*stack options*/
+#colStackOptions
+{
+    display: none; /* Initially hidden, shown when Translate is selected */
+    flex-direction: column; /* Stacks dropdowns vertically */
+    gap: 5px;
+    width: 100%; /* Match width of the button */
+}
+
+/*Drop down language list*/
+.language-select {
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer;
+    width: 100%; /* Make sure dropdowns are the same width */
+}

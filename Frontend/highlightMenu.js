@@ -50,7 +50,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 enableEventListeners();
 
 
-let currentAction = "Translate"; //first action (default)
+
+let currentAction = "Summarize"; //first action (default)
 
 function createMenu(x, y, selectedText) //Function to create
 {
@@ -61,14 +62,65 @@ function createMenu(x, y, selectedText) //Function to create
     menu.style.left = `${x}px`; //Set x pos
     menu.style.top = `${y}px`; //Set y pos
 
+    //Language selection drop opt
+    const languageOptions =
+    {
+        "eng": "English",
+        "ces": "Czech",
+        "dan": "Danish",
+        "nld": "Dutch",
+        "est": "Estonian",
+        "fin": "Finnish",
+        "fra": "French",
+        "deu": "German",
+        "ell": "Greek",
+        "ita": "Italian",
+        "nor": "Norwegian",
+        "pol": "Polish",
+        "por": "Portuguese",
+        "slv": "Slovene",
+        "spa": "Spanish",
+        "swe": "Swedish",
+        "tur": "Turkish"
+    };
+
+    const srcLangSelect = document.createElement('select');
+    srcLangSelect.classList.add("language-select");
+    for (const [code, name] of Object.entries(languageOptions))
+    {
+        let option = document.createElement('option');
+        option.value = code;
+        option.textContent = name;
+        srcLangSelect.appendChild(option);
+    }
+
+    const targetLangSelect = document.createElement('select');
+    targetLangSelect.classList.add("language-select");
+    for (const [code, name] of Object.entries(languageOptions))
+    {
+        let option = document.createElement('option');
+        option.value = code;
+        option.textContent = name;
+        targetLangSelect.appendChild(option);
+    }
+
+     //Column Option Stack
+     const colStackOptions = document.createElement('div');
+     colStackOptions.id = "colStackOptions";
+     colStackOptions.appendChild(srcLangSelect);
+     colStackOptions.appendChild(targetLangSelect);
+     colStackOptions.style.display = currentAction === "Translate" ? "flex" : "none";
+
 
     //Toggle button
     const toggleButton = document.createElement('button');
     toggleButton.id = "toggle-button";
     toggleButton.textContent = "🔄";
     toggleButton.addEventListener('click', () => {
-    currentAction = currentAction === "Translate" ? "Summarize" : "Translate"; //Sets the value of the main button
-    mainButton.textContent = currentAction;
+        currentAction = currentAction === "Translate" ? "Summarize" : "Translate"; //Sets the value of the main button
+        mainButton.textContent = currentAction;
+        //Display option depending on choice
+        colStackOptions.style.display = currentAction === "Translate" ? "flex" : "none";
     });
 
     //Action button
@@ -82,12 +134,15 @@ function createMenu(x, y, selectedText) //Function to create
     //Handles action of features
     if (currentAction === "Translate")
     {
-      const json = {
+        const sourceLang = srcLangSelect.value; //Source language
+        const targetLang = targetLangSelect.value; //Target language
+
+        const json = {
         text: selectedText,
         request_type: "translate",
-        source_lang: "eng",
-        target_lang: "fra",
-      };
+        source_lang: sourceLang,
+        target_lang: targetLang,
+    };
 
 
       fetch('https://jhello.xyz/json_post', {
@@ -100,7 +155,7 @@ function createMenu(x, y, selectedText) //Function to create
       .then(response => response.json())
       .then(result => {
         console.log("Response:", result);
-        createresponseWindow("Translated Text", result['text'], x, y);
+        createresponseWindow(`Translation (${languageOptions[sourceLang]} to ${languageOptions[targetLang]})`, result['text'], x, y);
       });
 
 
@@ -129,8 +184,18 @@ function createMenu(x, y, selectedText) //Function to create
     }
     });
 
+    // Initially hide language selection if "Summarize" is selected
+    if (currentAction === "Summarize") {
+        colStackOptions.style.display = "none";
+    }
+
+    //Add all the elements to the menu
     menu.appendChild(toggleButton);
-    menu.appendChild(mainButton);
+    const buttonWrapper = document.createElement('div');
+    buttonWrapper.id = "button-wrapper";
+    buttonWrapper.appendChild(mainButton);
+    buttonWrapper.appendChild(colStackOptions);
+    menu.appendChild(buttonWrapper);
     document.body.appendChild(menu);
 }
 
