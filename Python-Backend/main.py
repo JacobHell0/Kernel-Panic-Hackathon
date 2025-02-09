@@ -58,13 +58,13 @@ def handle_post_request():
             translator = TranslatorModel()
             result = translator.generate(data["text"], src_lang=data["source_lang"], tgt_lang=data["target_lang"])
             print("-- successfully translated, returning post now --")
-            return jsonify({"text": f"{result}", "request_type": "translate"}), 200
+            return jsonify({'text': result})
 
         elif data["request_type"] == "summarize":
             summarizer = SummarizeModel()
             summary = summarizer.summarize(data["text"])
             print("-- successfully summarized, returning post now --")
-            return jsonify({"text": f"{summary}", "request_type": "summarize"}), 200
+            return jsonify(summary)
 
         else:
             return jsonify("request_type not found"), 400

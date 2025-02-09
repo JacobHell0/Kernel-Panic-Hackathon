@@ -2,9 +2,9 @@ console.log("Content script is running");
 
 
 //Extract highlighted text from screen
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
 {
-    if (message.action === "extractText") 
+    if (message.action === "extractText")
     {
         console.log("Extracting text from the page...");
         const bodyText = document.body.innerText;
@@ -17,19 +17,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
 //Detect mouse up event to create menu after highlight text
 document.addEventListener('mouseup', (e) => {
   const selection = window.getSelection();
-  if (selection.toString().length > 0) 
+  if (selection.toString().length > 0)
     {
     setTimeout(() => { //Set delay to ensure menu appears after click release
 
       const menu = document.getElementById('context-menu'); //Label element
-      
-      if (!menu) 
+
+      if (!menu)
       {
         createMenu(e.pageX, e.pageY, selection.toString());
       }
     }, 100);
-  } 
-  else 
+  }
+  else
   {
     removeMenu();
   }
@@ -37,7 +37,7 @@ document.addEventListener('mouseup', (e) => {
 
 let currentAction = "Translate"; //first action (default)
 
-function createMenu(x, y, selectedText) //Function to create 
+function createMenu(x, y, selectedText) //Function to create
 {
     removeMenu(); //Ensure no old inactive menus
 
@@ -63,15 +63,54 @@ function createMenu(x, y, selectedText) //Function to create
     mainButton.addEventListener('click', () => {
     console.log(`${currentAction} button clicked`);
 
-    
+
     //Handles action of features
-    if (currentAction === "Translate") 
+    if (currentAction === "Translate")
     {
-        createresponseWindow("Translation from x to y", selectedText, x, y);
-    } 
-    else 
+      const json = {
+        text: selectedText,
+        request_type: "translate",
+        source_lang: "eng",
+        target_lang: "fra",
+      };
+
+
+      fetch('https://jhello.xyz/json_post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json)
+      })
+      .then(response => response.json())
+      .then(result => {
+        console.log("Response:", result);
+        createresponseWindow("Translated Text", result['text'], x, y);
+      });
+
+
+    }
+    else //summarize logic
     {
-        createresponseWindow("Summarized Text", "Your text should now be summarized!", x, y);
+        const json = {
+          text: selectedText,
+          request_type: "summarize",
+        };
+
+        fetch('https://jhello.xyz/json_post', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(json)
+        })
+        .then(response => response.json())
+        .then(result => {
+          console.log("Response:", result);
+          createresponseWindow("Summarized Text", result[0]['summary_text'], x, y);
+        });
+
+
     }
     });
 
@@ -81,10 +120,10 @@ function createMenu(x, y, selectedText) //Function to create
 }
 
 //Removes the menu from the screen
-function removeMenu() 
+function removeMenu()
 {
     const menu = document.getElementById('context-menu');
-    if (menu) 
+    if (menu)
     {
     document.body.removeChild(menu);
     }
@@ -93,7 +132,7 @@ function removeMenu()
 //Removes the menu when you click off
 document.addEventListener('click', (event) => {
     const menu = document.getElementById('context-menu');
-    if (menu && !menu.contains(event.target)) 
+    if (menu && !menu.contains(event.target))
     {
     removeMenu();
     }
