@@ -3,7 +3,7 @@
     "name": "Voxa - AI Translator & Voice Assistant",
     "version": "1.0",
     "description": "Translate text & speech, read pages aloud, and interact with voice commands.",
-    "permissions": ["storage", "activeTab", "tts", "tabs"],
+    "permissions": ["storage", "activeTab", "tts", "tabs", "scripting"],
     "host_permissions": ["https://*/*", "http://*/*"],
     "externally_connectable": {
       "matches": ["*://*.google.com/*", "*://*/*"]  

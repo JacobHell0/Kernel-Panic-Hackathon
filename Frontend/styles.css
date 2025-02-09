@@ -43,3 +43,22 @@ button:focus {
     color: #3e3ef8;
     box-shadow: 0 0 0 2px #3e3ef8;
 }
+
+#context-menu {
+    display: inline-block;
+    flex-direction: column;
+    gap: 0px;
+  }
+  
+  #context-menu button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  #context-menu button:hover {
+    background-color: #45a049;
+  }
+  
