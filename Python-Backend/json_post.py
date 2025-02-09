@@ -1,24 +1,24 @@
 from flask import request
 
 LANG_MAP = {
-            "ces": "ces_Latn",  # Czech
-            "dan": "dan_Latn",  # Danish
-            "nld": "nld_Latn",  # Dutch
-            "eng": "eng_Latn",  # English       works
-            "est": "est_Latn",  # Estonian
-            "fin": "fin_Latn",  # Finnish
-            "fra": "fra_Latn",  # French        works
-            "deu": "deu_Latn",  # German
-            "ell": "ell_Grek",  # Greek
-            "ita": "ita_Latn",  # Italian
-            "nor": "nor_Latn",  # Norwegian
-            "pol": "pol_Latn",  # Polish
-            "por": "por_Latn",  # Portuguese
-            "slv": "slv_Latn",  # Slovene
-            "spa": "spa_Latn",  # Spanish
-            "swe": "swe_Latn",  # Swedish
-            "tur": "tur_Latn"   # Turkish
-        }
+    "ces": "ces_Latn",  # Czech
+    "dan": "dan_Latn",  # Danish
+    "nld": "nld_Latn",  # Dutch
+    "eng": "eng_Latn",  # English       works
+    "est": "est_Latn",  # Estonian
+    "fin": "fin_Latn",  # Finnish
+    "fra": "fra_Latn",  # French        works
+    "deu": "deu_Latn",  # German
+    "ell": "ell_Grek",  # Greek
+    "ita": "ita_Latn",  # Italian
+    "nor": "nor_Latn",  # Norwegian
+    "pol": "pol_Latn",  # Polish
+    "por": "por_Latn",  # Portuguese
+    "slv": "slv_Latn",  # Slovene
+    "spa": "spa_Latn",  # Spanish
+    "swe": "swe_Latn",  # Swedish
+    "tur": "tur_Latn"   # Turkish
+}
 
 
 def json_post(request):
@@ -31,9 +31,9 @@ def json_post(request):
     # Check if required request_type exists before processing it
     if ('text' in data) and ('request_type' in data):
         req_type = data['request_type']
-    
+
     else: # return user error (400)
-        return {'error': 'json request does not contain "text" or ' + 
+        return {'error': 'json request does not contain "text" or ' +
                 '"request_type" fields'}, 400
 
     # Check if the required keys exist for translate
@@ -53,10 +53,10 @@ def json_post(request):
             'target_lang': LANG_MAP[data['target_lang']],
         }
         return response, 200  # Return the dictionary as JSON response with status 200
-    
+
     # form the summarize dictionary
     elif req_type == "summarize":
-        
+
         response = {
             'text': data['text'],
             'request_type': data['request_type'],
