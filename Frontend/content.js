@@ -47,14 +47,17 @@ document.addEventListener('mouseup', (e) => {
     button2.textContent = 'Read Text';
     button2.addEventListener('click', () => {
       console.log("Read Text button clicked");
-      // Implement reading functionality here
+
+      console.log("Selected text:", selectedText);
+      alert('Selected text: ' + selectedText);
+
     });
   
     const button3 = document.createElement('button');
     button3.textContent = 'Voice Command';
     button3.addEventListener('click', () => {
       console.log("Voice Command button clicked");
-      // Implement voice command functionality here
+      
     });
   
     menu.appendChild(button1);

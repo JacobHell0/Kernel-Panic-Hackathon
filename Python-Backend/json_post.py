@@ -22,12 +22,22 @@ LANG_MAP = {
 
 
 def json_post(request):
-
+    """This function takes in a request and attempts to parse it as json.
+    It also ensures all required fields are passed. Returns a json object with
+    a response code."""
     data = request.get_json()
     print(f"data: {data}")
 
-    # Check if the required keys exist
-    if ('text' in data) and ('request_type' in data) and \
+    # Check if required request_type exists before processing it
+    if ('text' in data) and ('request_type' in data):
+        req_type = data['request_type']
+    
+    else: # return user error (400)
+        return {'error': 'json request does not contain "text" or ' + 
+                '"request_type" fields'}, 400
+
+    # Check if the required keys exist for translate
+    if req_type == "translate" and \
        ('source_lang' in data) and ('target_lang' in data) :
 
         # ensure source and target are valid
@@ -43,6 +53,17 @@ def json_post(request):
             'target_lang': LANG_MAP[data['target_lang']],
         }
         return response, 200  # Return the dictionary as JSON response with status 200
+    
+    # form the summarize dictionary
+    elif req_type == "summarize":
+        
+        response = {
+            'text': data['text'],
+            'request_type': data['request_type'],
+        }
+
+        return response, 200
+
     else:
         # If keys are missing, return an error message
         return {'error': 'Invalid JSON data'}, 400
